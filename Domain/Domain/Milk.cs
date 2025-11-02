@@ -34,5 +34,10 @@ namespace Domain
             ExpirationDate = date.AddDays(7);
         }
 
+        public void ExtenfProductionDate()
+        {
+           
+            ExpirationDate = ExpirationDate.AddDays(7);
+        }
     }
 }
