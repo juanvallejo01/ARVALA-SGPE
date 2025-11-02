@@ -609,3 +609,10 @@ Web/MvcSample/obj/project.nuget.cache
 /Test/DomainTest/obj/Debug/net9.0
 /Test/ServicesTest
 /Web/MvcSample
+/Domain/Domain/bin/Release/net9.0
+/Domain/Domain/obj/Release/net9.0
+/Infrastructure/Infrastructure/bin/Release/net9.0
+/Infrastructure/Infrastructure/obj/Release/net9.0
+/Infrastructure/Infrastructure/obj/Release/net9.0/ref/Infrastructure.dll
+/Services/Services
+/Test/DomainTest
