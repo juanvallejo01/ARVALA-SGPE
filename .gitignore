@@ -602,3 +602,10 @@ Services/obj/Debug/net8.0/Services.GlobalUsings.g.cs
 Web/MvcSample/obj/project.assets.json
 Web/MvcSample/obj/project.nuget.cache
 /Web/MvcSample/.vs/MvcSample/FileContentIndex/7816ad44-c7ad-47d0-9d64-accd0d41ae15.vsidx
+/Domain/Domain/obj/Debug/net9.0
+/Infrastructure/Infrastructure/obj/Debug/net9.0
+/Services/Services/obj/Debug/net9.0
+/Test/DomainTest/bin/Debug/net9.0
+/Test/DomainTest/obj/Debug/net9.0
+/Test/ServicesTest
+/Web/MvcSample
