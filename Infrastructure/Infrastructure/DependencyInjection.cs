@@ -1,9 +1,11 @@
-﻿using Infrastructure.Repositories;
+﻿using Domain;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,15 +20,14 @@ namespace Infrastructure
             var c = configuration.GetConnectionString("DefaultConnection");
             //aca van los repositorios
             services.AddScoped<IFarmRepository, FarmRepository>();
-            
-            services.AddDbContext<AppDbContext>(options => {
+
+            services.AddDbContext<AppDbContext>(options =>
+            {
 
 
                 options.UseSqlServer(c);
+
             });
-
-
-
             return services;
         }
     }

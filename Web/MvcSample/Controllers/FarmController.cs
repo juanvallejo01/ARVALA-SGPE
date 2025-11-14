@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Services;
@@ -8,6 +9,7 @@ using Services.Models.FarmModels;
 
 namespace MvcSample.Controllers
 {
+    [Authorize(Roles = "Admin, Master")]
     public class FarmController : Controller
     {
 
@@ -29,6 +31,7 @@ namespace MvcSample.Controllers
         public async Task<IActionResult> AddFarm()
         {
             AddFarmModel model = new AddFarmModel();
+            await Task.CompletedTask;
             return View(model);
         }
         [HttpPost]
