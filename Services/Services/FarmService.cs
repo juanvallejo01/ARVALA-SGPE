@@ -1,14 +1,9 @@
-﻿using AutoMapper;
-using Domain;
+﻿using Domain;
 using Infrastructure.Repositories;
+using MapsterMapper;
 using Microsoft.Extensions.Configuration;
 using Services.Models.CowModels;
 using Services.Models.FarmModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services
 {
@@ -18,16 +13,18 @@ namespace Services
         private IFarmRepository FarmRepository{ get; set; }
         private IMapper Mapper { get; set; }
         private IConfiguration Configuration { get; set; }
-        public FarmService(IMapper mapper,IConfiguration configuration, IFarmRepository farmRepository)
+        public FarmService(IMapper mapper, IConfiguration configuration, IFarmRepository farmRepository)
         {
-            Mapper = mapper;
+            
             FarmRepository = farmRepository;
             Configuration = configuration;
+            Mapper = mapper;
         }
         public async Task <IList<FarmModel>> GetFarms()
         {
-            
-            return Mapper.Map<IList<FarmModel>>(await FarmRepository.GetFarms());
+            var farms = await FarmRepository.GetFarms();
+            var model = Mapper.Map<IList<FarmModel>>(farms);
+            return model;
 
         }
 
@@ -38,7 +35,7 @@ namespace Services
 
         public async Task<FarmModel> GetFarm(Guid id)
         {
-           return Mapper.Map<FarmModel> (await FarmRepository.GetFarm(id));
+            return  Mapper.Map<FarmModel> (await FarmRepository.GetFarm(id));
         }
 
         public async Task AddCow(AddCowModel model)

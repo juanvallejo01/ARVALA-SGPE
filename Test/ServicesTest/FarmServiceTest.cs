@@ -1,13 +1,10 @@
-using AutoMapper;
 using Domain;
 using Infrastructure.Repositories;
+using MapsterMapper;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Protocols;
 using Moq;
 using Services;
-using Services.Automapper;
-using System.Collections.Generic;
-using System.Linq;
+using Services.Models.FarmModels;
 
 namespace ServicesTest
 {
@@ -16,8 +13,9 @@ namespace ServicesTest
         private IFarmService farmService {  get; set; }
         //se hace mock de las clases de dependencia
         Mock<IFarmRepository> milkRepositoryMock { get; set; }
+        Mock<IMapper> mapperMock { get; set; }
         Farm farm { get; set; }
-        IMapper mapper { get; set; }
+        //IMapper mapper { get; set; }
 
         [SetUp]
         public void Setup()
@@ -27,7 +25,10 @@ namespace ServicesTest
             //se implementa el mock y se hace setup  de los metodos requeridos para la prueba
             milkRepositoryMock = new Mock<IFarmRepository>();
             milkRepositoryMock.Setup(x => x.GetFarm(It.IsAny<Guid>())).ReturnsAsync(farm);
-            mapper = new MapperConfiguration(cfg => new MappingProfile() ).CreateMapper();
+           mapperMock = new Mock<IMapper>();
+           mapperMock.Setup(x => x.Map<FarmModel>(It.IsAny<Farm>())).Returns(new FarmModel { Id = farm.Id, Name = "my Farm" });
+
+            //mapper = new MapperConfiguration(cfg => new MappingProfile() ).CreateMapper();
             //no s epuede hacer mock de esta clase se instanci con los parametros requeridos
             Dictionary<string, string> inMemorySettings = new Dictionary<string, string> 
             {
@@ -40,7 +41,7 @@ namespace ServicesTest
                 .AddInMemoryCollection(inMemorySettings)
                 .Build();
 
-            farmService = new FarmService(mapper, configuration, milkRepositoryMock.Object);
+            farmService = new FarmService(mapperMock.Object,configuration, milkRepositoryMock.Object);
         }
 
         [Test]

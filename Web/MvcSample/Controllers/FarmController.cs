@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using Domain;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Services;
 using Services.Models.CowModels;
 using Services.Models.FarmModels;

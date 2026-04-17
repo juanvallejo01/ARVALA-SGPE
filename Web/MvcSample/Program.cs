@@ -1,11 +1,15 @@
 
-using AutoMapper;
+
+
 using Domain;
 using Infrastructure;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Services;
 using Services.Automapper;
+using System.Reflection;
+
 
 namespace MvcSample
 {
@@ -44,12 +48,17 @@ namespace MvcSample
                 options.SlidingExpiration = true;
             });
 
-            // Add automapper
-            var mappingConfiguration = new MapperConfiguration (m => m.AddProfile(new MappingProfile()));
-           
-            IMapper mapper = mappingConfiguration.CreateMapper();
-            
-            builder.Services.AddSingleton(mapper);
+
+ 
+
+            // Configuración básica de Mapster con DI
+            var config = TypeAdapterConfig.GlobalSettings;
+            config.Scan(typeof(MappingProfile).Assembly); // Escanea perfiles IRegister
+
+            builder.Services.AddSingleton(config);                    // Configuración global
+            builder.Services.AddScoped<IMapper, ServiceMapper>();    // Registra el mapper
+
+
 
             //builder.Services.AddCors(p => p.AddPolicy("CORS_Policy", builder =>
             //{
@@ -94,7 +103,7 @@ namespace MvcSample
             {
 
                 var services = scope.ServiceProvider;
-                SeedRolesAndAdminUser(services).Wait();
+               // SeedRolesAndAdminUser(services).Wait();
 
             }
 

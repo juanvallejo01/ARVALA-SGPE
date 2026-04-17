@@ -8,12 +8,7 @@ namespace Services.Models.CowModels
     {
         public Guid Id { get; set; }
         public string Race { get; set; }
-        public MilkModel Milk { get; set; }
-    }
-
-
-    public class CowsModel
-    {
-        public IList<CowModel> Cows { get; set; } = new List<CowModel>();
+        public IList<MilkModel> Milks { get; set; } = new List<MilkModel>();
+        
     }
 }

@@ -1,50 +1,32 @@
-﻿using AutoMapper;
-using Domain;
+﻿using Domain;
+using Mapster;
 using Services.Models.CowModels;
 using Services.Models.FarmModels;
-using Services.Models.MilkModels;
 
 namespace Services.Automapper
 {
-    public class MappingProfile : Profile
+    public  class MappingProfile : IRegister
     {
-        public MappingProfile()
-        {
-            FarmMapper();
-            MilkMapper();
-            CowMapper();
-        }
+        public void Register(TypeAdapterConfig config)
+        {//                  src , dest 
+            config.NewConfig<Cow, CowModel>()
+                .Map(dest => dest.Id, src => src.Id)
+                .Map(dest => dest.Milks, src => src.Milks);
 
-        private void MilkMapper()
-        {
-            CreateMap<Milk, MilkModel>()
-            .ReverseMap();
+            config.NewConfig<CowModel, Cow>()
+                .Map(dest => dest.Id, src => src.Id)
+                .Map(dest => dest.Milks, src => src.Milks);
 
-        }
+            config.NewConfig<Farm, FarmModel>()
+                .Map(dest => dest.Id, src => src.Id)
+                .Map(dest => dest.Name, src => src.Name)
+                .Map(des => des.CowCount, src => src.Cows.Count())
+                .Map(dest => dest.Location, src => src.Location);
 
-        private void CowMapper()
-        {
-            CreateMap<Cow, CowModel>()
-            .ReverseMap();
-
-            CreateMap<Cow, AddCowModel>()
-            .ReverseMap();
-
-        }
-
-        private void FarmMapper()
-        {
-            CreateMap<Farm, FarmModel>()
-                .ForMember(dest => dest.CowCount,
-                           opt => opt.MapFrom(src => src.Cows != null ? src.Cows.Count : 0))
-                .ForMember(dest => dest.TotalMilkLitters,opt => opt.MapFrom(src => src.getTotalLitters()))
-            .ReverseMap();
-
-            CreateMap<Farm, AddFarmModel>()
-                .ReverseMap();
-        }   
-
+            config.NewConfig<AddFarmModel, Farm>()
+            .Map(dest => dest.Name, src => src.Name)
+            .Map(dest => dest.Location, src => src.Location);
+      }
     }
-
     
 }

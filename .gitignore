@@ -618,3 +618,13 @@ Web/MvcSample/obj/project.nuget.cache
 /Test/DomainTest
 /Domain/Domain/bin/Debug/net9.0
 /Infrastructure/Infrastructure/bin/Debug/net9.0
+/Infrastructure/Infrastructure/obj/Release/net10.0/refint
+/Infrastructure/Infrastructure/obj/Release/net10.0/ref
+/Infrastructure/Infrastructure/obj/Release/net10.0
+/Infrastructure/Infrastructure/obj/Debug/net10.0
+/Infrastructure/Infrastructure/bin/Release/net10.0
+/Domain/Domain/obj/Release/net10.0/refint
+/Domain/Domain/obj/Release/net10.0/ref
+/Domain/Domain/obj/Release/net10.0
+/Domain/Domain/obj/Debug/net10.0
+/Domain/Domain/bin/Release/net10.0
