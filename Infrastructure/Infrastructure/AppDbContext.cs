@@ -1,4 +1,4 @@
-﻿using Domain;
+using Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +18,13 @@ namespace Infrastructure
         public DbSet<Milk> Milks { get; set; }
         public DbSet<Cow> Cows { get; set; }
         public DbSet<Farm> Farms { get; set; }
+
+        // Modulo Avicola
+        public DbSet<Galpon> Galpones { get; set; }
+        public DbSet<Lote> Lotes { get; set; }
+        public DbSet<ProduccionDiaria> ProduccionesDiarias { get; set; }
+        public DbSet<InventarioAlimento> InventariosAlimento { get; set; }
+        public DbSet<RegistroVacunacion> RegistrosVacunacion { get; set; }
     }
 
 }

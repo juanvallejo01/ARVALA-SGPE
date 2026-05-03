@@ -1,4 +1,4 @@
-﻿using Domain;
+using Domain;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +20,13 @@ namespace Infrastructure
             var c = configuration.GetConnectionString("DefaultConnection");
             //aca van los repositorios
             services.AddScoped<IFarmRepository, FarmRepository>();
+
+            // Repositorios del modulo Avicola
+            services.AddScoped<IGalponRepository, GalponRepository>();
+            services.AddScoped<ILoteRepository, LoteRepository>();
+            services.AddScoped<IProduccionRepository, ProduccionRepository>();
+            services.AddScoped<IVacunacionRepository, VacunacionRepository>();
+            services.AddScoped<IInventarioAlimentoRepository, InventarioAlimentoRepository>();
 
             services.AddDbContext<AppDbContext>(options =>
             {

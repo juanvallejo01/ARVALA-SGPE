@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -31,8 +31,27 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="farm" asp-action="index">Granjas</a>
                             </li>
                         }
-                       
-                    </ul>
+                        @if(User.Identity.IsAuthenticated && (User.IsInRole("Owner") || User.IsInRole("Veterinarian")))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Batch" asp-action="Index">Trazabilidad de Lotes</a>
+                            </li>
+                        }
+                        @if(User.Identity.IsAuthenticated && (User.IsInRole("Owner") || User.IsInRole("Veterinarian") || User.IsInRole("Operator")))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Production" asp-action="Index">Produccion Diaria</a>
+                            </li>
+                        }
+                        @if(User.Identity.IsAuthenticated && User.IsInRole("Owner"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Production" asp-action="Dashboard">Dashboard Gerencial</a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Production" asp-action="Catalogo">Catálogo de Productos</a>
+                        </li>
                     <ul class="navbar-nav">
                         @if (User.Identity.IsAuthenticated)
                         {
