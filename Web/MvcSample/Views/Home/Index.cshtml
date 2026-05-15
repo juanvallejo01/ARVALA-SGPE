@@ -1,9 +1,130 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <a asp-controller="Milk" asp-action="Cows">  <i class="material-icons edit-icon">mode_edit</i></a>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- HERO -->
+<div class="rounded-4 mb-4 p-4 p-md-5 text-white" style="background: linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%); box-shadow:0 6px 24px rgba(0,0,0,.25);">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h1 class="display-5 fw-bold mb-2" style="color:#f5a623">
+                <i class="bi bi-egg-fried me-2"></i>ARVALA SGPE
+            </h1>
+            <p class="lead mb-3" style="color:#cdd3de">
+                Sistema de Gestión de Producción Avícola — control total de galpones, lotes, producción y reportes de eficiencia.
+            </p>
+            @if (!User.Identity!.IsAuthenticated)
+            {
+                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-arvala btn-lg me-2">
+                    <i class="bi bi-lock me-1"></i> Ingresar al sistema
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Produccion" asp-action="Dashboard" class="btn btn-arvala btn-lg me-2">
+                    <i class="bi bi-speedometer2 me-1"></i> Dashboard gerencial
+                </a>
+                <a asp-controller="Produccion" asp-action="Index" class="btn btn-outline-light btn-lg">
+                    <i class="bi bi-clipboard-data me-1"></i> Producción diaria
+                </a>
+            }
+        </div>
+        <div class="col-md-4 text-center d-none d-md-block">
+            <i class="bi bi-egg-fried" style="font-size:9rem;color:#f5a623;opacity:.35"></i>
+        </div>
+    </div>
+</div>
+
+<!-- MÓDULOS -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <a asp-controller="Galpon" asp-action="Index" class="text-decoration-none">
+            <div class="entity-card h-100 text-center p-3">
+                <i class="bi bi-grid-3x3-gap-fill fs-1 mb-2" style="color:#f5a623"></i>
+                <div class="fw-bold">Galpones</div>
+                <small class="text-muted">Gestión de instalaciones</small>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-md-3">
+        <a asp-controller="Lote" asp-action="Index" class="text-decoration-none">
+            <div class="entity-card h-100 text-center p-3">
+                <i class="bi bi-box-seam-fill fs-1 mb-2" style="color:#3498db"></i>
+                <div class="fw-bold">Lotes</div>
+                <small class="text-muted">Seguimiento de bandadas</small>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-md-3">
+        <a asp-controller="Produccion" asp-action="Index" class="text-decoration-none">
+            <div class="entity-card h-100 text-center p-3">
+                <i class="bi bi-clipboard2-data-fill fs-1 mb-2" style="color:#27ae60"></i>
+                <div class="fw-bold">Producción</div>
+                <small class="text-muted">Registro diario de huevos</small>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-md-3">
+        <a asp-controller="Produccion" asp-action="Catalogo" class="text-decoration-none">
+            <div class="entity-card h-100 text-center p-3">
+                <i class="bi bi-shop-window fs-1 mb-2" style="color:#8e44ad"></i>
+                <div class="fw-bold">Catálogo</div>
+                <small class="text-muted">Precios al público</small>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- INFO CARDS -->
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="data-card h-100">
+            <div class="data-card-header"><i class="bi bi-shield-check"></i> Roles del sistema</div>
+            <div class="p-3">
+                <ul class="list-unstyled mb-0" style="font-size:.9rem">
+                    <li class="mb-2"><span class="badge text-bg-danger me-2">Admin</span> Acceso total al sistema</li>
+                    <li class="mb-2"><span class="badge text-bg-warning text-dark me-2">Owner</span> Gestión + reportes gerenciales</li>
+                    <li class="mb-2"><span class="badge text-bg-info me-2">Veterinarian</span> Vacunaciones y control sanitario</li>
+                    <li class="mb-2"><span class="badge text-bg-secondary me-2">Operator</span> Registro de producción diaria</li>
+                    <li class="mb-2"><span class="badge text-bg-success me-2">Customer</span> Catálogo de productos y precios</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="data-card h-100">
+            <div class="data-card-header"><i class="bi bi-clipboard-check"></i> Funcionalidades clave</div>
+            <div class="p-3">
+                <ul class="list-unstyled mb-0" style="font-size:.9rem">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Control de galpones y lotes</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Producción diaria (AA / A / B)</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Gestión de vacunaciones</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Inventario de alimento</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Conversión alimenticia y curva de postura</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Catálogo de precios para clientes</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="data-card h-100">
+            <div class="data-card-header"><i class="bi bi-info-circle"></i> Acceso rápido</div>
+            <div class="p-3 d-grid gap-2">
+                @if (!User.Identity!.IsAuthenticated)
+                {
+                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-arvala">
+                        <i class="bi bi-lock me-1"></i> Iniciar sesión
+                    </a>
+                }
+                <a asp-controller="Produccion" asp-action="Catalogo" class="btn btn-outline-secondary">
+                    <i class="bi bi-shop me-1"></i> Ver catálogo de huevos
+                </a>
+                @if (User.Identity!.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Owner")))
+                {
+                    <a asp-controller="Produccion" asp-action="Dashboard" class="btn btn-outline-primary">
+                        <i class="bi bi-bar-chart-line me-1"></i> Abrir Dashboard
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
 </div>

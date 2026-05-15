@@ -1,102 +1,228 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MvcSample</title>
+    <title>@ViewData["Title"] — ARVALA SGPE</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MvcSample.styles.css" asp-append-version="true" />
+    <style>
+        :root {
+            --arvala-dark: #1a1a2e;
+            --arvala-mid:  #16213e;
+            --arvala-accent: #f5a623;
+            --arvala-accent-hover: #e09510;
+            --arvala-green: #27ae60;
+        }
+        body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; }
+
+        /* ── TOP NAV ─────────────────────────────────────────────── */
+        .arvala-navbar {
+            background: var(--arvala-dark);
+            padding: .5rem 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,.4);
+        }
+        .arvala-navbar .navbar-brand {
+            color: var(--arvala-accent) !important;
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+        .arvala-navbar .nav-link { color: #cdd3de !important; font-size: .93rem; transition: color .2s; }
+        .arvala-navbar .nav-link:hover, .arvala-navbar .nav-link.active { color: var(--arvala-accent) !important; }
+        .arvala-navbar .dropdown-menu { background: var(--arvala-mid); border: 1px solid #2d3a55; }
+        .arvala-navbar .dropdown-item { color: #cdd3de; font-size: .9rem; }
+        .arvala-navbar .dropdown-item:hover { background: #263050; color: var(--arvala-accent); }
+        .arvala-navbar .dropdown-divider { border-color: #2d3a55; }
+
+        /* ── USER BADGE ─────────────────────────────────────────── */
+        .user-badge {
+            background: rgba(245,166,35,.15);
+            border: 1px solid rgba(245,166,35,.4);
+            border-radius: 20px;
+            padding: .25rem .85rem;
+            color: var(--arvala-accent) !important;
+            font-size: .88rem;
+        }
+        .btn-logout {
+            background: rgba(220,53,69,.2);
+            border: 1px solid rgba(220,53,69,.4);
+            border-radius: 20px;
+            padding: .25rem .85rem;
+            color: #f08a8a !important;
+            font-size: .88rem;
+        }
+        .btn-logout:hover { background: rgba(220,53,69,.35); color: #fff !important; }
+
+        /* ── BREADCRUMB / PAGE HEADER ───────────────────────────── */
+        .page-header {
+            background: #fff;
+            border-left: 4px solid var(--arvala-accent);
+            border-radius: 8px;
+            padding: .85rem 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,.06);
+        }
+        .page-header h2 { margin: 0; font-size: 1.4rem; font-weight: 700; color: var(--arvala-dark); }
+        .page-header p  { margin: 0; color: #6c757d; font-size: .88rem; }
+
+        /* ── STAT CARDS ─────────────────────────────────────────── */
+        .stat-card {
+            border-radius: 14px;
+            padding: 1.1rem 1.25rem;
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(0,0,0,.12);
+            transition: transform .2s;
+        }
+        .stat-card:hover { transform: translateY(-3px); }
+        .stat-card .stat-icon { font-size: 2.2rem; opacity: .75; }
+        .stat-card .stat-value { font-size: 1.9rem; font-weight: 700; line-height: 1.1; }
+        .stat-card .stat-label { font-size: .8rem; opacity: .85; }
+
+        /* ── DATA CARDS / TABLES ────────────────────────────────── */
+        .data-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.07);
+            overflow: hidden;
+        }
+        .data-card .data-card-header {
+            background: var(--arvala-dark);
+            color: #fff;
+            padding: .75rem 1.25rem;
+            font-weight: 600;
+            font-size: .95rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+        .table thead th { background: #f8f9fa; color: #495057; font-size: .84rem; text-transform: uppercase; letter-spacing: .4px; border-bottom: 2px solid #dee2e6; }
+        .table tbody tr:hover { background: #f0f4ff; }
+        .table td { vertical-align: middle; font-size: .92rem; }
+
+        /* ── BADGES ─────────────────────────────────────────────── */
+        .badge-activo   { background: #d4edda; color: #155724; }
+        .badge-finalizado { background: #e2e3e5; color: #383d41; }
+        .badge-sacrificado { background: #f8d7da; color: #721c24; }
+
+        /* ── BUTTONS ─────────────────────────────────────────────── */
+        .btn-arvala { background: var(--arvala-accent); border-color: var(--arvala-accent); color: #fff; font-weight: 600; }
+        .btn-arvala:hover { background: var(--arvala-accent-hover); border-color: var(--arvala-accent-hover); color: #fff; }
+
+        /* ── GALPON / LOTE CARDS ────────────────────────────────── */
+        .entity-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 3px 10px rgba(0,0,0,.08);
+            transition: transform .2s, box-shadow .2s;
+            overflow: hidden;
+        }
+        .entity-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.13); }
+        .entity-card .entity-card-top { background: var(--arvala-dark); color: #fff; padding: 1rem 1.25rem; }
+        .entity-card .entity-card-body { padding: 1rem 1.25rem; }
+        .entity-card .entity-card-footer { padding: .75rem 1.25rem; background: #f8f9fa; display: flex; gap: .5rem; flex-wrap: wrap; }
+
+        /* ── FOOTER ─────────────────────────────────────────────── */
+        footer { background: var(--arvala-dark); color: #adb5bd; padding: 1rem 0; margin-top: 3rem; font-size: .85rem; }
+        footer a { color: var(--arvala-accent); text-decoration: none; }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">🐓 ARVALA-SGPE</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Produccion" asp-action="Catalogo">🥚 Catálogo</a>
-                        </li>
-                        @if (User.Identity!.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Owner") || User.IsInRole("Veterinarian")))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Galpon" asp-action="Index">🏠 Galpones</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Lote" asp-action="Index">📦 Lotes</a>
-                            </li>
-                        }
-                        @if (User.Identity!.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Owner") || User.IsInRole("Veterinarian") || User.IsInRole("Operator")))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Produccion" asp-action="Index">📋 Producción</a>
-                            </li>
-                        }
-                        @if (User.Identity!.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Owner")))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Produccion" asp-action="Dashboard">📊 Dashboard</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Precio" asp-action="Index">💰 Precios</a>
-                            </li>
-                        }
-                        @if (User.Identity!.IsAuthenticated && User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Farm" asp-action="Index">🐄 Granjas</a>
-                            </li>
-                        }
-                    <ul class="navbar-nav">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <span class="nav-link text-dark">Hola, @User.Identity.Name!</span>
-                            </li>
-                            <li class="nav-item">
-                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
-                                      asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                    <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-                                </form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-                            </li>
-                        }
-                    </ul>
-                   @*  <partial name="_LoginPartial" /> *@
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - MvcSample - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<nav class="navbar navbar-expand-lg arvala-navbar sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+            <i class="bi bi-egg-fried me-1"></i> ARVALA <span style="color:#fff;font-weight:300">SGPE</span>
+        </a>
+        <button class="navbar-toggler border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <i class="bi bi-list text-white fs-4"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav me-auto gap-1">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index"><i class="bi bi-house me-1"></i>Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Produccion" asp-action="Catalogo"><i class="bi bi-shop me-1"></i>Catálogo</a>
+                </li>
+
+                @if (User.Identity!.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Owner") || User.IsInRole("Veterinarian") || User.IsInRole("Operator")))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-building me-1"></i>Instalaciones
+                        </a>
+                        <ul class="dropdown-menu">
+                            @if (User.IsInRole("Admin") || User.IsInRole("Owner") || User.IsInRole("Veterinarian"))
+                            {
+                                <li><a class="dropdown-item" asp-controller="Galpon" asp-action="Index"><i class="bi bi-grid-3x3-gap me-2"></i>Galpones</a></li>
+                                <li><a class="dropdown-item" asp-controller="Lote" asp-action="Index"><i class="bi bi-box-seam me-2"></i>Lotes</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                            }
+                            <li><a class="dropdown-item" asp-controller="Produccion" asp-action="Index"><i class="bi bi-clipboard-data me-2"></i>Producción Diaria</a></li>
+                        </ul>
+                    </li>
+                }
+
+                @if (User.Identity!.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Owner")))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-bar-chart-line me-1"></i>Reportes
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" asp-controller="Produccion" asp-action="Dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard Gerencial</a></li>
+                            <li><a class="dropdown-item" asp-controller="Precio" asp-action="Index"><i class="bi bi-tag me-2"></i>Gestión de Precios</a></li>
+                        </ul>
+                    </li>
+                }
+            </ul>
+
+            <ul class="navbar-nav align-items-center gap-2">
+                @if (User.Identity!.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <span class="user-badge">
+                            <i class="bi bi-person-circle me-1"></i>@User.Identity.Name
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index","Home",new{area=""})">
+                            <button type="submit" class="btn btn-logout border-0 cursor-pointer">
+                                <i class="bi bi-box-arrow-right me-1"></i>Salir
+                            </button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login"><i class="bi bi-lock me-1"></i>Ingresar</a>
+                    </li>
+                }
+            </ul>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    </div>
+</nav>
+
+<div class="container-fluid px-4 py-3" style="max-width:1400px; margin:auto;">
+    <main role="main" class="pb-4">
+        @RenderBody()
+    </main>
+</div>
+
+<footer>
+    <div class="container text-center">
+        <i class="bi bi-egg-fried me-1" style="color:var(--arvala-accent)"></i>
+        <strong style="color:#fff">ARVALA SGPE</strong> &nbsp;·&nbsp; Sistema de Gestión de Producción Avícola &nbsp;·&nbsp; &copy; 2026
+        &nbsp;·&nbsp; <a asp-controller="Home" asp-action="Privacy">Privacidad</a>
+    </div>
+</footer>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

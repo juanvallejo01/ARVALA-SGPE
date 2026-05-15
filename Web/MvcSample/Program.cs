@@ -103,10 +103,125 @@ namespace MvcSample
             {
                 var services = scope.ServiceProvider;
                 SeedRolesAndAdminUser(services).Wait();
+                SeedDemoData(services).Wait();
             }
 
 
             app.Run();
+        }
+
+
+        static async Task SeedDemoData(IServiceProvider serviceProvider)
+        {
+            var db = serviceProvider.GetRequiredService<Infrastructure.AppDbContext>();
+
+            // Solo sembrar si no hay datos
+            if (db.Galpones.Any()) return;
+
+            // ── Galpones ─────────────────────────────────────────────
+            var g1 = new Domain.Galpon { Id = Guid.NewGuid(), Nombre = "Galpón Norte",  Descripcion = "Ponedoras de raza Hy-Line Brown, ventilación forzada" };
+            var g2 = new Domain.Galpon { Id = Guid.NewGuid(), Nombre = "Galpón Sur",    Descripcion = "Ponedoras Lohmann White, sistema de jaulas enriquecidas" };
+            var g3 = new Domain.Galpon { Id = Guid.NewGuid(), Nombre = "Galpón Este",   Descripcion = "Engorde Ross 308, piso de viruta, ciclo 49 días" };
+            db.Galpones.AddRange(g1, g2, g3);
+
+            // ── Lotes ─────────────────────────────────────────────────
+            var hoy = DateTime.UtcNow.Date;
+            var l1 = new Domain.Lote { Id = Guid.NewGuid(), GalponId = g1.Id, Raza = "Hy-Line Brown",   Proposito = "Postura",  Estado = "Activo",     FechaRecepcion = DateTime.SpecifyKind(hoy.AddDays(-90), DateTimeKind.Utc), CantidadInicial = 1200 };
+            var l2 = new Domain.Lote { Id = Guid.NewGuid(), GalponId = g2.Id, Raza = "Lohmann White",   Proposito = "Postura",  Estado = "Activo",     FechaRecepcion = DateTime.SpecifyKind(hoy.AddDays(-60), DateTimeKind.Utc), CantidadInicial = 950  };
+            var l3 = new Domain.Lote { Id = Guid.NewGuid(), GalponId = g3.Id, Raza = "Ross 308",        Proposito = "Engorde",  Estado = "Finalizado", FechaRecepcion = DateTime.SpecifyKind(hoy.AddDays(-120),DateTimeKind.Utc), CantidadInicial = 2000 };
+            var l4 = new Domain.Lote { Id = Guid.NewGuid(), GalponId = g1.Id, Raza = "ISA Brown",       Proposito = "Postura",  Estado = "Activo",     FechaRecepcion = DateTime.SpecifyKind(hoy.AddDays(-30), DateTimeKind.Utc), CantidadInicial = 800  };
+            db.Lotes.AddRange(l1, l2, l3, l4);
+
+            // ── Producción diaria ─────────────────────────────────────
+            var rng = new Random(42);
+            var producciones = new List<Domain.ProduccionDiaria>();
+
+            // L1: 90 días con tasa ~85 %
+            for (int d = 89; d >= 0; d--)
+            {
+                int aves = 1200 - (d > 70 ? 2 : d > 40 ? 1 : 0);
+                int comerciales = (int)(aves * (0.82 + rng.NextDouble() * 0.08));
+                producciones.Add(new Domain.ProduccionDiaria
+                {
+                    Id = Guid.NewGuid(), LoteId = l1.Id,
+                    Fecha = DateTime.SpecifyKind(hoy.AddDays(-d), DateTimeKind.Utc),
+                    HuevosAA = (int)(comerciales * 0.20),
+                    HuevosA  = (int)(comerciales * 0.60),
+                    HuevosB  = comerciales - (int)(comerciales * 0.20) - (int)(comerciales * 0.60),
+                    Rotos    = rng.Next(2, 18),
+                    Mortalidad = d % 15 == 0 ? 1 : 0,
+                    AlimentoConsumidoKg = Math.Round(aves * 0.115m + (decimal)(rng.NextDouble() * 5), 1)
+                });
+            }
+
+            // L2: 60 días con tasa ~78 %
+            for (int d = 59; d >= 0; d--)
+            {
+                int aves = 950 - (d > 30 ? 1 : 0);
+                int comerciales = (int)(aves * (0.75 + rng.NextDouble() * 0.08));
+                producciones.Add(new Domain.ProduccionDiaria
+                {
+                    Id = Guid.NewGuid(), LoteId = l2.Id,
+                    Fecha = DateTime.SpecifyKind(hoy.AddDays(-d), DateTimeKind.Utc),
+                    HuevosAA = (int)(comerciales * 0.15),
+                    HuevosA  = (int)(comerciales * 0.62),
+                    HuevosB  = comerciales - (int)(comerciales * 0.15) - (int)(comerciales * 0.62),
+                    Rotos    = rng.Next(1, 12),
+                    Mortalidad = d % 20 == 0 ? 1 : 0,
+                    AlimentoConsumidoKg = Math.Round(aves * 0.112m + (decimal)(rng.NextDouble() * 4), 1)
+                });
+            }
+
+            // L4: 30 días arranque
+            for (int d = 29; d >= 0; d--)
+            {
+                int aves = 800;
+                double tasa = 0.40 + (29 - d) * 0.015; // curva de arranque
+                int comerciales = (int)(aves * Math.Min(tasa, 0.80));
+                producciones.Add(new Domain.ProduccionDiaria
+                {
+                    Id = Guid.NewGuid(), LoteId = l4.Id,
+                    Fecha = DateTime.SpecifyKind(hoy.AddDays(-d), DateTimeKind.Utc),
+                    HuevosAA = (int)(comerciales * 0.10),
+                    HuevosA  = (int)(comerciales * 0.55),
+                    HuevosB  = comerciales - (int)(comerciales * 0.10) - (int)(comerciales * 0.55),
+                    Rotos    = rng.Next(1, 8),
+                    Mortalidad = 0,
+                    AlimentoConsumidoKg = Math.Round(aves * 0.110m + (decimal)(rng.NextDouble() * 3), 1)
+                });
+            }
+
+            db.ProduccionesDiarias.AddRange(producciones);
+
+            // ── Vacunaciones ─────────────────────────────────────────
+            db.RegistrosVacunacion.AddRange(
+                new Domain.RegistroVacunacion { Id = Guid.NewGuid(), LoteId = l1.Id, Fecha = DateTime.SpecifyKind(hoy.AddDays(-85), DateTimeKind.Utc), Vacuna = "Newcastle (HB1)",      MetodoAplicacion = "Agua de bebida",  AvesVacunadas = 1200, Observaciones = "Sin incidencias" },
+                new Domain.RegistroVacunacion { Id = Guid.NewGuid(), LoteId = l1.Id, Fecha = DateTime.SpecifyKind(hoy.AddDays(-56), DateTimeKind.Utc), Vacuna = "Bronquitis Infecciosa", MetodoAplicacion = "Spray",           AvesVacunadas = 1198, Observaciones = "Leve estrés post-aplicación" },
+                new Domain.RegistroVacunacion { Id = Guid.NewGuid(), LoteId = l1.Id, Fecha = DateTime.SpecifyKind(hoy.AddDays(-28), DateTimeKind.Utc), Vacuna = "Gumboro (D78)",         MetodoAplicacion = "Agua de bebida",  AvesVacunadas = 1195, Observaciones = "Refuerzo programado" },
+                new Domain.RegistroVacunacion { Id = Guid.NewGuid(), LoteId = l2.Id, Fecha = DateTime.SpecifyKind(hoy.AddDays(-55), DateTimeKind.Utc), Vacuna = "Newcastle (Clone 30)",  MetodoAplicacion = "Ocular",          AvesVacunadas = 950,  Observaciones = "" },
+                new Domain.RegistroVacunacion { Id = Guid.NewGuid(), LoteId = l2.Id, Fecha = DateTime.SpecifyKind(hoy.AddDays(-25), DateTimeKind.Utc), Vacuna = "Marek",                 MetodoAplicacion = "Subcutánea",      AvesVacunadas = 949,  Observaciones = "Al ingreso" },
+                new Domain.RegistroVacunacion { Id = Guid.NewGuid(), LoteId = l4.Id, Fecha = DateTime.SpecifyKind(hoy.AddDays(-28), DateTimeKind.Utc), Vacuna = "Newcastle + Bronquitis", MetodoAplicacion = "Spray",          AvesVacunadas = 800,  Observaciones = "Primera dosis" }
+            );
+
+            // ── Inventario de alimento ────────────────────────────────
+            db.InventariosAlimento.AddRange(
+                new Domain.InventarioAlimento { Id = Guid.NewGuid(), LoteId = l1.Id, TipoAlimento = "Balanceado postura",   CantidadKg = 1850m, FechaRegistro = DateTime.SpecifyKind(hoy.AddDays(-5), DateTimeKind.Utc) },
+                new Domain.InventarioAlimento { Id = Guid.NewGuid(), LoteId = l1.Id, TipoAlimento = "Suplemento cálcico",  CantidadKg = 320m,  FechaRegistro = DateTime.SpecifyKind(hoy.AddDays(-5), DateTimeKind.Utc) },
+                new Domain.InventarioAlimento { Id = Guid.NewGuid(), LoteId = l2.Id, TipoAlimento = "Balanceado postura",  CantidadKg = 1200m, FechaRegistro = DateTime.SpecifyKind(hoy.AddDays(-3), DateTimeKind.Utc) },
+                new Domain.InventarioAlimento { Id = Guid.NewGuid(), LoteId = l4.Id, TipoAlimento = "Balanceado arranque", CantidadKg = 2100m, FechaRegistro = DateTime.SpecifyKind(hoy.AddDays(-2), DateTimeKind.Utc) }
+            );
+
+            // ── Precios ───────────────────────────────────────────────
+            if (!db.PreciosHuevo.Any())
+            {
+                db.PreciosHuevo.AddRange(
+                    new Domain.PrecioHuevo { Id = Guid.NewGuid(), Clasificacion = "AA", PrecioUnitario = 0.28m, PrecioPorDocena = 3.10m, Descripcion = "Huevo extra grande, doble yema, calibre >73g", Disponible = true,  FechaActualizacion = DateTime.UtcNow },
+                    new Domain.PrecioHuevo { Id = Guid.NewGuid(), Clasificacion = "A",  PrecioUnitario = 0.22m, PrecioPorDocena = 2.50m, Descripcion = "Huevo grande sin defectos, calibre 63-73g",    Disponible = true,  FechaActualizacion = DateTime.UtcNow },
+                    new Domain.PrecioHuevo { Id = Guid.NewGuid(), Clasificacion = "B",  PrecioUnitario = 0.16m, PrecioPorDocena = 1.80m, Descripcion = "Huevo mediano, leve variación de tamaño",       Disponible = true,  FechaActualizacion = DateTime.UtcNow }
+                );
+            }
+
+            await db.SaveChangesAsync();
         }
 
 
