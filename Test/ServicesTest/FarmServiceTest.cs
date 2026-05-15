@@ -47,7 +47,7 @@ namespace ServicesTest
         [Test]
         public void MilkService_Exist()
         {
-            Assert.NotNull(farmService);
+            Assert.That(farmService, Is.Not.Null);
             var result = farmService.GetFarm(farm.Id);
             Assert.That(result.Result.Id, Is.EqualTo(farm.Id));
         }

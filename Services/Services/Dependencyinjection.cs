@@ -14,6 +14,8 @@ namespace Services
             services.AddTransient<IProduccionService, ProduccionService>();
             services.AddTransient<IVacunacionService, VacunacionService>();
             services.AddTransient<IInventarioAlimentoService, InventarioAlimentoService>();
+            services.AddTransient<IPrecioHuevoService, PrecioHuevoService>();
+            services.AddTransient<IReporteService, ReporteService>();
 
             return services;
         }

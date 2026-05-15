@@ -1,6 +1,7 @@
 using Domain;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -27,13 +28,11 @@ namespace Infrastructure
             services.AddScoped<IProduccionRepository, ProduccionRepository>();
             services.AddScoped<IVacunacionRepository, VacunacionRepository>();
             services.AddScoped<IInventarioAlimentoRepository, InventarioAlimentoRepository>();
+            services.AddScoped<IPrecioHuevoRepository, PrecioHuevoRepository>();
 
             services.AddDbContext<AppDbContext>(options =>
             {
-
-
-                options.UseSqlServer(c);
-
+                options.UseNpgsql(c);
             });
             return services;
         }

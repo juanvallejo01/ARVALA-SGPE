@@ -101,10 +101,8 @@ namespace MvcSample
 
             using (var scope = app.Services.CreateScope())
             {
-
                 var services = scope.ServiceProvider;
-               // SeedRolesAndAdminUser(services).Wait();
-
+                SeedRolesAndAdminUser(services).Wait();
             }
 
 
@@ -119,7 +117,7 @@ namespace MvcSample
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
 
             // 1. Crear roles si no existen
-            string[] roles = { "Admin", "User", "Master" };
+            string[] roles = { "Admin", "Owner", "Veterinarian", "Operator", "Customer" };
 
             foreach (var roleName in roles)
             {

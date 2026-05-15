@@ -5,6 +5,7 @@ using Services.Models.FarmModels;
 using Services.Models.GalponModels;
 using Services.Models.LoteModels;
 using Services.Models.ProduccionModels;
+using Services.Models.PrecioModels;
 
 namespace Services.Automapper
 {
@@ -115,6 +116,10 @@ namespace Services.Automapper
                 .Map(dest => dest.MetodoAplicacion, src => src.MetodoAplicacion)
                 .Map(dest => dest.AvesVacunadas, src => src.AvesVacunadas)
                 .Map(dest => dest.Observaciones, src => src.Observaciones);
+
+            // ---- Precios ----
+            config.NewConfig<PrecioHuevo, PrecioHuevoModel>();
+            config.NewConfig<AddPrecioHuevoModel, PrecioHuevo>();
         }
     }
 }

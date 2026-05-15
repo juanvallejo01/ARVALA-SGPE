@@ -25,6 +25,24 @@ namespace Infrastructure
         public DbSet<ProduccionDiaria> ProduccionesDiarias { get; set; }
         public DbSet<InventarioAlimento> InventariosAlimento { get; set; }
         public DbSet<RegistroVacunacion> RegistrosVacunacion { get; set; }
+        public DbSet<PrecioHuevo> PreciosHuevo { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<InventarioAlimento>()
+                .Property(x => x.CantidadKg)
+                .HasPrecision(18, 4);
+            builder.Entity<ProduccionDiaria>()
+                .Property(x => x.AlimentoConsumidoKg)
+                .HasPrecision(18, 4);
+            builder.Entity<PrecioHuevo>()
+                .Property(x => x.PrecioUnitario)
+                .HasPrecision(18, 4);
+            builder.Entity<PrecioHuevo>()
+                .Property(x => x.PrecioPorDocena)
+                .HasPrecision(18, 4);
+        }
     }
 
 }
