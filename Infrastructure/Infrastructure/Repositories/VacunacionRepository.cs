@@ -21,13 +21,13 @@ namespace Infrastructure.Repositories
             {
                 await Beguin();
                 await context.RegistrosVacunacion.AddAsync(vacunacion);
+                await context.SaveChangesAsync();
                 await Comit();
-                await Save();
             }
-            catch (Exception ex)
+            catch
             {
                 await RollBack();
-                throw ex;
+                throw;
             }
         }
     }

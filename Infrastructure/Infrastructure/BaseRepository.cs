@@ -1,16 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure
+﻿namespace Infrastructure
 {
     public class BaseRepository
     {
-        public readonly AppDbContext context;
+        protected readonly AppDbContext context;
         public BaseRepository(AppDbContext context)
         {
             this.context = context;

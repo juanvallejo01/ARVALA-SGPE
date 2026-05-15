@@ -13,8 +13,7 @@ namespace Infrastructure.Repositories
         {
             return await context.Lotes
                 .Include(x => x.Galpon)
-                .Include(x => x.Producciones)
-                .Include(x => x.Inventarios)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -30,7 +29,7 @@ namespace Infrastructure.Repositories
         public async Task<IList<Lote>> GetLotesByGalpon(Guid galponId)
         {
             return await context.Lotes
-                .Include(x => x.Producciones)
+                .AsNoTracking()
                 .Where(x => x.GalponId == galponId)
                 .ToListAsync();
         }
@@ -41,13 +40,13 @@ namespace Infrastructure.Repositories
             {
                 await Beguin();
                 await context.Lotes.AddAsync(lote);
+                await context.SaveChangesAsync();
                 await Comit();
-                await Save();
             }
-            catch (Exception ex)
+            catch
             {
                 await RollBack();
-                throw ex;
+                throw;
             }
         }
 
@@ -56,13 +55,14 @@ namespace Infrastructure.Repositories
             try
             {
                 await Beguin();
+                context.Lotes.Update(lote);
                 await context.SaveChangesAsync();
                 await Comit();
             }
-            catch (Exception ex)
+            catch
             {
                 await RollBack();
-                throw ex;
+                throw;
             }
         }
     }

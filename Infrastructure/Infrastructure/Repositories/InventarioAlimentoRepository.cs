@@ -26,13 +26,13 @@ namespace Infrastructure.Repositories
             {
                 await Beguin();
                 await context.InventariosAlimento.AddAsync(inventario);
+                await context.SaveChangesAsync();
                 await Comit();
-                await Save();
             }
-            catch (Exception ex)
+            catch
             {
                 await RollBack();
-                throw ex;
+                throw;
             }
         }
 
@@ -41,13 +41,14 @@ namespace Infrastructure.Repositories
             try
             {
                 await Beguin();
+                context.InventariosAlimento.Update(inventario);
                 await context.SaveChangesAsync();
                 await Comit();
             }
-            catch (Exception ex)
+            catch
             {
                 await RollBack();
-                throw ex;
+                throw;
             }
         }
     }

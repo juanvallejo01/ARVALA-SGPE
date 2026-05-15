@@ -38,13 +38,13 @@ namespace Infrastructure.Repositories
             {
                 await Beguin();
                 await context.ProduccionesDiarias.AddAsync(produccion);
+                await context.SaveChangesAsync();
                 await Comit();
-                await Save();
             }
-            catch (Exception ex)
+            catch
             {
                 await RollBack();
-                throw ex;
+                throw;
             }
         }
     }

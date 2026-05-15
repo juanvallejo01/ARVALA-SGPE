@@ -12,7 +12,7 @@ namespace Infrastructure.Repositories
         public async Task<IList<Galpon>> GetGalpones()
         {
             return await context.Galpones
-                .Include(x => x.Lotes)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -29,13 +29,13 @@ namespace Infrastructure.Repositories
             {
                 await Beguin();
                 await context.Galpones.AddAsync(galpon);
+                await context.SaveChangesAsync();
                 await Comit();
-                await Save();
             }
-            catch (Exception ex)
+            catch
             {
                 await RollBack();
-                throw ex;
+                throw;
             }
         }
 
@@ -44,13 +44,14 @@ namespace Infrastructure.Repositories
             try
             {
                 await Beguin();
+                context.Galpones.Update(galpon);
                 await context.SaveChangesAsync();
                 await Comit();
             }
-            catch (Exception ex)
+            catch
             {
                 await RollBack();
-                throw ex;
+                throw;
             }
         }
     }
