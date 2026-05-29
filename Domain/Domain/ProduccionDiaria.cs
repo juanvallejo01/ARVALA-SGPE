@@ -23,9 +23,9 @@ namespace Domain
         public int HuevosA { get; set; }
 
         /// <summary>
-        /// Huevos de calidad B (tamano mediano o con leve defecto).
+        /// Huevos de calidad AAA (tamano estandar comercial).
         /// </summary>
-        public int HuevosB { get; set; }
+        public int HuevosAAA { get; set; }
 
         /// <summary>
         /// Huevos rotos o no comercializables.
@@ -44,12 +44,12 @@ namespace Domain
 
         public int GetTotalHuevosComerciales()
         {
-            return HuevosAA + HuevosA + HuevosB;
+            return HuevosAA + HuevosA + HuevosAAA;
         }
 
         public int GetTotalHuevosBrutos()
         {
-            return HuevosAA + HuevosA + HuevosB + Rotos;
+            return HuevosAA + HuevosA + HuevosAAA + Rotos;
         }
     }
 }

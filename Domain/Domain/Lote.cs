@@ -45,7 +45,7 @@ namespace Domain
             int total = 0;
             foreach (var produccion in Producciones)
             {
-                total += produccion.HuevosAA + produccion.HuevosA + produccion.HuevosB;
+                total += produccion.HuevosAA + produccion.HuevosA + produccion.HuevosAAA;
             }
             return total;
         }

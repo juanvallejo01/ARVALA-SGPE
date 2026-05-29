@@ -70,7 +70,7 @@ namespace Services.Automapper
                 .Map(dest => dest.Fecha, src => src.Fecha)
                 .Map(dest => dest.HuevosAA, src => src.HuevosAA)
                 .Map(dest => dest.HuevosA, src => src.HuevosA)
-                .Map(dest => dest.HuevosB, src => src.HuevosB)
+                .Map(dest => dest.HuevosAAA, src => src.HuevosAAA)
                 .Map(dest => dest.Rotos, src => src.Rotos)
                 .Map(dest => dest.Mortalidad, src => src.Mortalidad)
                 .Map(dest => dest.AlimentoConsumidoKg, src => src.AlimentoConsumidoKg)
@@ -81,7 +81,7 @@ namespace Services.Automapper
                 .Map(dest => dest.Fecha, src => src.Fecha)
                 .Map(dest => dest.HuevosAA, src => src.HuevosAA)
                 .Map(dest => dest.HuevosA, src => src.HuevosA)
-                .Map(dest => dest.HuevosB, src => src.HuevosB)
+                .Map(dest => dest.HuevosAAA, src => src.HuevosAAA)
                 .Map(dest => dest.Rotos, src => src.Rotos)
                 .Map(dest => dest.Mortalidad, src => src.Mortalidad)
                 .Map(dest => dest.AlimentoConsumidoKg, src => src.AlimentoConsumidoKg);

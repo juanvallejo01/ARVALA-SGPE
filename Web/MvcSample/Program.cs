@@ -147,7 +147,7 @@ namespace MvcSample
                     Fecha = DateTime.SpecifyKind(hoy.AddDays(-d), DateTimeKind.Utc),
                     HuevosAA = (int)(comerciales * 0.20),
                     HuevosA  = (int)(comerciales * 0.60),
-                    HuevosB  = comerciales - (int)(comerciales * 0.20) - (int)(comerciales * 0.60),
+                    HuevosAAA  = comerciales - (int)(comerciales * 0.20) - (int)(comerciales * 0.60),
                     Rotos    = rng.Next(2, 18),
                     Mortalidad = d % 15 == 0 ? 1 : 0,
                     AlimentoConsumidoKg = Math.Round(aves * 0.115m + (decimal)(rng.NextDouble() * 5), 1)
@@ -165,7 +165,7 @@ namespace MvcSample
                     Fecha = DateTime.SpecifyKind(hoy.AddDays(-d), DateTimeKind.Utc),
                     HuevosAA = (int)(comerciales * 0.15),
                     HuevosA  = (int)(comerciales * 0.62),
-                    HuevosB  = comerciales - (int)(comerciales * 0.15) - (int)(comerciales * 0.62),
+                    HuevosAAA  = comerciales - (int)(comerciales * 0.15) - (int)(comerciales * 0.62),
                     Rotos    = rng.Next(1, 12),
                     Mortalidad = d % 20 == 0 ? 1 : 0,
                     AlimentoConsumidoKg = Math.Round(aves * 0.112m + (decimal)(rng.NextDouble() * 4), 1)
@@ -184,7 +184,7 @@ namespace MvcSample
                     Fecha = DateTime.SpecifyKind(hoy.AddDays(-d), DateTimeKind.Utc),
                     HuevosAA = (int)(comerciales * 0.10),
                     HuevosA  = (int)(comerciales * 0.55),
-                    HuevosB  = comerciales - (int)(comerciales * 0.10) - (int)(comerciales * 0.55),
+                    HuevosAAA  = comerciales - (int)(comerciales * 0.10) - (int)(comerciales * 0.55),
                     Rotos    = rng.Next(1, 8),
                     Mortalidad = 0,
                     AlimentoConsumidoKg = Math.Round(aves * 0.110m + (decimal)(rng.NextDouble() * 3), 1)
@@ -217,7 +217,7 @@ namespace MvcSample
                 db.PreciosHuevo.AddRange(
                     new Domain.PrecioHuevo { Id = Guid.NewGuid(), Clasificacion = "AA", PrecioUnitario = 0.28m, PrecioPorDocena = 3.10m, Descripcion = "Huevo extra grande, doble yema, calibre >73g", Disponible = true,  FechaActualizacion = DateTime.UtcNow },
                     new Domain.PrecioHuevo { Id = Guid.NewGuid(), Clasificacion = "A",  PrecioUnitario = 0.22m, PrecioPorDocena = 2.50m, Descripcion = "Huevo grande sin defectos, calibre 63-73g",    Disponible = true,  FechaActualizacion = DateTime.UtcNow },
-                    new Domain.PrecioHuevo { Id = Guid.NewGuid(), Clasificacion = "B",  PrecioUnitario = 0.16m, PrecioPorDocena = 1.80m, Descripcion = "Huevo mediano, leve variación de tamaño",       Disponible = true,  FechaActualizacion = DateTime.UtcNow }
+                    new Domain.PrecioHuevo { Id = Guid.NewGuid(), Clasificacion = "AAA",  PrecioUnitario = 0.16m, PrecioPorDocena = 1.80m, Descripcion = "Huevo estándar comercial, calibre 53-63g",    Disponible = true,  FechaActualizacion = DateTime.UtcNow }
                 );
             }
 
